@@ -1,0 +1,35 @@
+title: DCSync via Replication GUID Access
+id: a1b2c3d4-purple-lab-003
+status: experimental
+description: |
+    Detects DCSync attacks. Event ID 4662 with the DS-Replication-Get-Changes
+    or DS-Replication-Get-Changes-All GUID indicates an account is exercising
+    replication permissions — used by attackers to extract password hashes
+    including krbtgt (enabling Golden Tickets).
+references:
+    - https://attack.mitre.org/techniques/T1003/006/
+    - https://stealthbits.com/blog/extracting-user-password-data-with-mimikatz-dcsync/
+author: Rohan / Purple Lab
+date: 2026-04-25
+tags:
+    - attack.credential_access
+    - attack.t1003.006
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4662
+        Properties|contains:
+            - '1131f6aa-9c07-11d1-f79f-00c04fc2dcd2'   # DS-Replication-Get-Changes
+            - '1131f6ad-9c07-11d1-f79f-00c04fc2dcd2'   # DS-Replication-Get-Changes-All
+            - '89e95b76-444d-4c62-991a-0facbeda640c'   # DS-Replication-Get-Changes-In-Filtered-Set
+    filter_machine_accounts:
+        SubjectUserName|endswith: '$'  # Legitimate DC-to-DC replication uses machine accounts
+    filter_msol:
+        SubjectUserName|startswith: 'MSOL_'  # Azure AD Connect
+    condition: selection and not (filter_machine_accounts or filter_msol)
+falsepositives:
+    - Domain controller-to-domain controller replication (filtered above)
+    - Azure AD Connect sync account (filtered above)
+level: critical

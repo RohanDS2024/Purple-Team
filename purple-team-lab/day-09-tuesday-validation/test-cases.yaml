@@ -1,0 +1,65 @@
+# test-cases.yaml — Detection validation suite
+#
+# Each test case maps an attack technique to the Wazuh rule that should fire.
+# The runner is a small bash script in attack_runners/ that triggers the attack.
+
+tests:
+  - name: "Kerberoasting (RC4 service ticket)"
+    attack_id: "T1558.003"
+    rule_id: 100100
+    runner: "01_kerberoast.sh"
+
+  - name: "AS-REP Roasting"
+    attack_id: "T1558.004"
+    rule_id: 100101
+    runner: "02_asrep.sh"
+
+  - name: "Password Spray"
+    attack_id: "T1110.003"
+    rule_id: 100103
+    runner: "03_password_spray.sh"
+
+  - name: "DCSync"
+    attack_id: "T1003.006"
+    rule_id: 100104
+    runner: "04_dcsync.sh"
+
+  - name: "BloodHound LDAP enumeration"
+    attack_id: "T1087.002"
+    rule_id: 100106
+    runner: "05_bloodhound.sh"
+
+  - name: "PowerShell encoded command"
+    attack_id: "T1059.001"
+    rule_id: 100107
+    runner: "06_pwsh_encoded.sh"
+
+  - name: "LSASS process access"
+    attack_id: "T1003.001"
+    rule_id: 100108
+    runner: "07_lsass_access.sh"
+
+  - name: "Privileged group membership change"
+    attack_id: "T1098"
+    rule_id: 100109
+    runner: "08_da_member_add.sh"
+
+  - name: "Suspicious service creation"
+    attack_id: "T1543.003"
+    rule_id: 100110
+    runner: "09_service_create.sh"
+
+  - name: "Suspicious scheduled task"
+    attack_id: "T1053.005"
+    rule_id: 100111
+    runner: "10_scheduled_task.sh"
+
+  - name: "WMI lateral movement"
+    attack_id: "T1047"
+    rule_id: 100112
+    runner: "11_wmi_lateral.sh"
+
+  - name: "Local administrator created"
+    attack_id: "T1136.001"
+    rule_id: 100113
+    runner: "12_local_admin_create.sh"

@@ -1,0 +1,31 @@
+title: Kerberoasting Activity (RC4 Service Ticket Request)
+id: a1b2c3d4-purple-lab-001
+status: experimental
+description: |
+    Detects Kerberoasting attacks via Event ID 4769 with RC4-HMAC encryption type.
+    Modern AD uses AES by default; RC4 service ticket requests are a strong indicator
+    that an attacker is requesting tickets for offline cracking.
+references:
+    - https://attack.mitre.org/techniques/T1558/003/
+    - https://github.com/SigmaHQ/sigma/blob/master/rules/windows/builtin/security/win_security_susp_kerberos_rc4_ticket.yml
+author: Rohan / Purple Lab
+date: 2026-04-25
+tags:
+    - attack.credential_access
+    - attack.t1558.003
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4769
+        TicketEncryptionType: '0x17'   # RC4-HMAC
+    filter_machine_accounts:
+        TargetUserName|endswith: '$'   # Exclude machine accounts
+    filter_krbtgt:
+        TargetUserName: 'krbtgt'
+    condition: selection and not (filter_machine_accounts or filter_krbtgt)
+falsepositives:
+    - Legacy applications still requesting RC4 tickets
+    - Misconfigured service accounts
+level: high

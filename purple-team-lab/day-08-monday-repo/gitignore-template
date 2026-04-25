@@ -1,0 +1,49 @@
+# Lab journal — keep local only if it has any sensitive notes
+# Comment this out if your journal is sanitized and you want to publish it
+# lab-journal.md
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Sensitive: never commit
+*.pem
+*.key
+id_rsa
+id_ed25519
+*.pfx
+.env
+secrets.yaml
+credentials.txt
+
+# Cracked hashes (remove if you want to publish them — they're lab passwords)
+*.cracked
+hashes.txt
+kerberoast-hashes.txt
+asrep-hashes.txt
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Wazuh local copies (committed via templates only)
+ossec.conf
+local_decoder.xml
+
+# Large binary captures
+*.pcap
+*.pcapng
